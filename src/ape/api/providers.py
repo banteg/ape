@@ -258,7 +258,9 @@ class ProviderAPI(BaseInterfaceModel):
         """
 
     @abstractmethod
-    def send_call(self, txn: TransactionAPI) -> bytes:  # Return value of function
+    def send_call(
+        self, txn: TransactionAPI, height: Optional[int]
+    ) -> bytes:  # Return value of function
         """
         Execute a new transaction call immediately without creating a
         transaction on the block chain.
@@ -653,9 +655,9 @@ class Web3Provider(ProviderAPI, ABC):
     def get_storage_at(self, address: str, slot: int) -> bytes:
         return self.web3.eth.get_storage_at(address, slot)  # type: ignore
 
-    def send_call(self, txn: TransactionAPI) -> bytes:
+    def send_call(self, txn: TransactionAPI, height: Optional[int] = None) -> bytes:
         try:
-            return self.web3.eth.call(txn.dict())
+            return self.web3.eth.call(txn.dict(), height)
         except ValueError as err:
             raise self.get_virtual_machine_error(err) from err
 

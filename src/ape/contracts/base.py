@@ -61,10 +61,11 @@ class ContractConstructor(ManagerAccessMixin):
 
 
 class ContractCall(ManagerAccessMixin):
-    def __init__(self, abi: MethodABI, address: AddressType) -> None:
+    def __init__(self, abi: MethodABI, address: AddressType, height: Optional[int] = None) -> None:
         super().__init__()
         self.abi = abi
         self.address = address
+        self.height = height
 
     def __repr__(self) -> str:
         return self.abi.signature
@@ -79,7 +80,7 @@ class ContractCall(ManagerAccessMixin):
         txn = self.serialize_transaction(*args, **kwargs)
         txn.chain_id = self.provider.network.chain_id
 
-        raw_output = self.provider.send_call(txn)
+        raw_output = self.provider.send_call(txn, height=self.height)
         output = self.provider.network.ecosystem.decode_returndata(
             self.abi,
             raw_output,
@@ -123,6 +124,7 @@ class ContractCallHandler(ManagerAccessMixin):
         return ContractCall(  # type: ignore
             abi=selected_abi,
             address=self.contract.address,
+            height=kwargs.get("height"),
         )(*args, **kwargs)
 
 
