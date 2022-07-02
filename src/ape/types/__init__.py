@@ -49,6 +49,9 @@ class ContractLog:
     name: str
     """The name of the event."""
 
+    contract_address: str
+    """The contract that has emitted a log."""
+
     event_arguments: Dict[str, Any]
     """The arguments to the event, including both indexed and non-indexed data."""
 
