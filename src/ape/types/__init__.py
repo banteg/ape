@@ -74,8 +74,7 @@ class ContractLog:
         Args:
             item (str): The name of the property.
         """
-
-        if item not in self.event_arguments:
+        if not self.__initialised__ or item not in self.event_arguments:
             raise AttributeError(f"{self.__class__.__name__} has no attribute '{item}'.")
 
         return self.event_arguments[item]
