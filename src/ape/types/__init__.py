@@ -64,7 +64,7 @@ class ContractLog:
     block_hash: Any
     """The hash of the block containing the transaction that produced this log."""
 
-    index: int
+    log_index: int
     """The index of the log on the transaction."""
 
     def __repr__(self) -> str:
